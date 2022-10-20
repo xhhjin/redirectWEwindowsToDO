@@ -37,7 +37,7 @@ For the script to work also in cases of scenario No. (2), of course, the XY sett
 
 The script will stay in the system tray until manually exited through the script's tray context menu.
 
-Some of the scripts settings can be customized by the user. These settings are located in a separate config file. That config file is named "redirectWEwindowsToXY_v#.#.config.ahk", with "#.#" standing for the config file's version number, e.g. “4.1“. Each config file is compatible to all scripts who's version number starts with those same digits. However, a script file's version number may be longer.
+Some of the scripts settings can be customized by the user. These settings are located in a separate config file. That config file is named "redirectWEwindowsToXY_v#.#.config.ahk", with "#.#" standing for the config file's version number, e.g. "4.1" Each config file is compatible to all scripts who's version number starts with those same digits. However, a script file's version number may be longer.
 
 
 HOW TO CONTROL REDIRECTIONS
@@ -269,11 +269,11 @@ Changes in version 4.0 - 200501:
    overview in a much shorter file without the distraction of the intro or the
    main code below. The new .config.ahk file carries the first two digits of the
    version number of the script version, which it belongs to, in its name, e.g.
-   “4.1“. The main version and/or the first sub-version number of the script
+   "4.1" The main version and/or the first sub-version number of the script
    (and thus the name of the .config.ahk file) will from now on be incremented
    only, if the compatibility of the .config.ahk file changes. When the script is
    updated but the compatibility with the config file stays the same, only the 3rd
-   part of the script's version number will be incremented, e.g. “4.1.2“. (At first
+   part of the script's version number will be incremented, e.g. "4.1.2" (At first
    I was about to increment only the script's main version number each time the
    config file would change, but realized that there might still be a considerable
    amount of new user settings to come?, so the chances that the main version
@@ -765,31 +765,33 @@ lParam differs in type according to the value of wParam received. For most of th
 			vSelected = %vPath%
 		}
 
+		vPathOfDO := ""
 		IfExist, %vPathToDOplorerForAutostart%
 		{
-			Run, %vPathToDOplorerForAutostart% /cmd Go "%vSelected%" NEWTAB=tofront			;If the file exists then run the following command
+			vPathOfDO := vPathToDOplorerForAutostart
 		}
-		else IfExist, C:\Program Files\GPSoftware\Directory Opus\dopusrt.exe                ;Otherwise, if the file exists then run the following command
+		else IfExist, C:\Program Files\GPSoftware\Directory Opus\dopusrt.exe
 		{
-			Run, C:\Program Files\GPSoftware\Directory Opus\dopusrt.exe /cmd Go "%vSelected%" NEWTAB=tofront
+			vPathOfDO := "C:\Program Files\GPSoftware\Directory Opus\dopusrt.exe"
 		}
-		else IfExist, C:\Program Files\Directory Opus\dopusrt.exe                           ;Otherwise, if the file exists then run the following command
+		else IfExist, C:\Program Files\Directory Opus\dopusrt.exe
 		{
-			Run, C:\Program Files\Directory Opus\dopusrt.exe /cmd Go "%vSelected%" NEWTAB=tofront
+			vPathOfDO := "C:\Program Files\Directory Opus\dopusrt.exe"
 		}
-		else IfExist, D:\Program Files\GPSoftware\Directory Opus\dopusrt.exe                ;Otherwise, if the file exists then run the following command
+		else IfExist, D:\Program Files\GPSoftware\Directory Opus\dopusrt.exe
 		{
-			Run, D:\Program Files\GPSoftware\Directory Opus\dopusrt.exe /cmd Go "%vSelected%" NEWTAB=tofront
+			vPathOfDO := "D:\Program Files\GPSoftware\Directory Opus\dopusrt.exe"
 		}
-		else IfExist, D:\Program Files\Directory Opus\dopusrt.exe                           ;Otherwise, if the file exists then run the following command
+		else IfExist, D:\Program Files\Directory Opus\dopusrt.exe
 		{
-			Run, D:\Program Files\Directory Opus\dopusrt.exe /cmd Go "%vSelected%" NEWTAB=tofront
+			vPathOfDO := "D:\Program Files\Directory Opus\dopusrt.exe"
 		}
 		else
 		{
 			MsgBox, Not found dopusrt.exe.`n`nChange the path of dopusrt.exe in the ahk file.
 			return
 		}
+		Run, %vPathOfDO% /cmd Go "%vSelected%" NEWTAB=tofront
 
 		vXYDidNotAutostart := 0
 		; SetTitleMatchMode, 2
@@ -1325,8 +1327,8 @@ Run a script (note that the command only returns when the script is completed in
 copydata 525048, 'echo "hi!";', 3;
 
 Notes
-· The command only returns when the receiving window has fully processed the data. For example if you send a script the command will return only after the script has terminated.
-· The mode parameter in SC CopyData simply selects different dwData:
+  The command only returns when the receiving window has fully processed the data. For example if you send a script the command will return only after the script has terminated.
+  The mode parameter in SC CopyData simply selects different dwData:
 If called with mode 0 then cds.dwData == 4194304 (0x00400000)
 If called with mode 1 then cds.dwData == 4194305 (0x00400001)
 If called with mode 2 then cds.dwData == 4194306 (0x00400002)
@@ -1340,8 +1342,8 @@ So any application can use these dwData values to trigger a specific reaction in
 REMOTE CONTROL *** For software developers only ***
 
 You can run an XYplorer script from an external program using the WM_COPYDATA command with XYplorer's hWnd. This means if you are a programmer you can fully remote control XYplorer.
-· cds.dwData: 4194305 (0x00400001)
-· cds.lpData: The syntax is identical to the one of the command line switch /script=<script resource>, so you can either pass the path to a script file (commonly called *.xys), or pass the script directly (must be preceded by ::).
+  cds.dwData: 4194305 (0x00400001)
+  cds.lpData: The syntax is identical to the one of the command line switch /script=<script resource>, so you can either pass the path to a script file (commonly called *.xys), or pass the script directly (must be preceded by ::).
 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
